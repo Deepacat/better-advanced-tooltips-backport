@@ -1,7 +1,7 @@
-package dev.latvian.mods.betteradvancedtooltips.core.mixin;
+package net.deepacat.mods.betteradvancedtooltips.core.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import dev.latvian.mods.betteradvancedtooltips.BATConfig;
+import net.deepacat.mods.betteradvancedtooltips.BATConfig;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.world.item.CreativeModeTab;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,8 +11,12 @@ import java.util.List;
 
 @Mixin(CreativeModeInventoryScreen.class)
 public class CreativeModeInventoryScreenMixin {
-	@ModifyExpressionValue(method = "getTooltipFromContainerItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/CreativeModeTabs;tabs()Ljava/util/List;"))
+	@ModifyExpressionValue(
+		method = "getTooltipFromContainerItem",
+		at = @At(value = "INVOKE",
+		target = "Lnet/minecraft/world/item/CreativeModeTabs;tabs()Ljava/util/List;")
+	)
 	private List<CreativeModeTab> bat$getTooltipFromContainerItem(List<CreativeModeTab> original) {
-		return BATConfig.CONFIG.removeCreativeTabTooltip.getAsBoolean() ? List.of() : original;
+		return BATConfig.removeCreativeTabTooltip.get() ? List.of() : original;
 	}
 }

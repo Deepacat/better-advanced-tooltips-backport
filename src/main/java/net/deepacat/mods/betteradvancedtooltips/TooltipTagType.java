@@ -1,4 +1,4 @@
-package dev.latvian.mods.betteradvancedtooltips;
+package net.deepacat.mods.betteradvancedtooltips;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;

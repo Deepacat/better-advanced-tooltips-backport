@@ -1,10 +1,10 @@
-package dev.latvian.mods.betteradvancedtooltips;
+package net.deepacat.mods.betteradvancedtooltips;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.Event;
-import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Map;
 import java.util.stream.Stream;
