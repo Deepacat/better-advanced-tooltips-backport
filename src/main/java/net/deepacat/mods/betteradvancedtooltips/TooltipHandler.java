@@ -24,6 +24,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
@@ -197,6 +199,19 @@ public class TooltipHandler {
 					addTagsForBlock(tEvent, blockItem.getBlock(), registryAccess);
 				}
 
+				// Block entity tags (if the item is a BlockItem that places a block with a block entity)
+				if (stack.getItem() instanceof BlockItem blockItem) {
+					Block block = blockItem.getBlock();
+					BlockEntityType<?> beType = getBlockEntityTypeForBlock(block, registryAccess);
+					if (beType != null) {
+						ResourceKey<BlockEntityType<?>> key = ForgeRegistries.BLOCK_ENTITY_TYPES.getResourceKey(beType).orElse(null);
+						if (key != null) {
+							Registry<BlockEntityType<?>> registry = registryAccess.registryOrThrow(Registries.BLOCK_ENTITY_TYPE);
+							addTagsToEvent(tEvent, TooltipTagType.BLOCK_ENTITY_TYPE, key, registry);
+						}
+					}
+				}
+
 				// Fluid tags (if bucket)
 				if (stack.getItem() instanceof BucketItem bucketItem) {
 					Fluid fluid = bucketItem.getFluid();
@@ -309,6 +324,21 @@ public class TooltipHandler {
 			Registry<Block> registry = registryAccess.registryOrThrow(Registries.BLOCK);
 			addTagsToEvent(event, TooltipTagType.BLOCK, key, registry);
 		}
+	}
+
+	private static final Map<Block, BlockEntityType<?>> BLOCK_TO_BE_TYPE = new HashMap<>();
+
+	private static BlockEntityType<?> getBlockEntityTypeForBlock(Block block, RegistryAccess registryAccess) {
+		return BLOCK_TO_BE_TYPE.computeIfAbsent(block, b -> {
+			Registry<BlockEntityType<?>> registry = registryAccess.registryOrThrow(Registries.BLOCK_ENTITY_TYPE);
+			BlockState defaultState = b.defaultBlockState();
+			for (BlockEntityType<?> bet : registry) {
+				if (bet.isValid(defaultState)) {
+					return bet;
+				}
+			}
+			return null;
+		});
 	}
 
 	private static void addTagsForFluid(ItemTagIconsEvent event,

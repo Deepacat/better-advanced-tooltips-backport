@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 
 public record TooltipTagType<T>(ResourceKey<? extends Registry<T>> registryKey, Component component) {
@@ -20,6 +21,7 @@ public record TooltipTagType<T>(ResourceKey<? extends Registry<T>> registryKey, 
 
 	public static final TooltipTagType<BannerPattern> BANNER_PATTERN = new TooltipTagType<>(Registries.BANNER_PATTERN, "A");
 	public static final TooltipTagType<Block> BLOCK = new TooltipTagType<>(Registries.BLOCK, "B");
+	public static final TooltipTagType<BlockEntityType<?>> BLOCK_ENTITY_TYPE = new TooltipTagType<>(Registries.BLOCK_ENTITY_TYPE, "R");
 	public static final TooltipTagType<Enchantment> ENCHANTMENT = new TooltipTagType<>(Registries.ENCHANTMENT, "C");
 	public static final TooltipTagType<EntityType<?>> ENTITY_TYPE = new TooltipTagType<>(Registries.ENTITY_TYPE, "E");
 	public static final TooltipTagType<Fluid> FLUID = new TooltipTagType<>(Registries.FLUID, "F");
