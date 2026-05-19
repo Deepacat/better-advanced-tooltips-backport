@@ -3,5 +3,9 @@
 	"betteradvancedtooltips.configuration.remove_component_count_tooltip": "Remove Component Count Tooltip",
 	"betteradvancedtooltips.configuration.fuel_tooltip": "Fuel Tooltip",
 	"betteradvancedtooltips.configuration.tag_tooltip": "Tag Tooltip",
-	"betteradvancedtooltips.configuration.component_tooltip": "Component Tooltip"
+	"betteradvancedtooltips.configuration.component_tooltip": "Component Tooltip",
+
+	"key.categories.betteradvancedtooltips": "Better Advanced Tooltips",
+	"key.betteradvancedtooltips.view_nbt": "Display NBT Data",
+	"key.betteradvancedtooltips.view_tags": "Display Tags & Info"
 }

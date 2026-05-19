@@ -2,7 +2,6 @@ package net.deepacat.mods.betteradvancedtooltips;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -40,8 +39,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static net.deepacat.mods.betteradvancedtooltips.KeyBinds.isKeyPressed;
+
 @Mod.EventBusSubscriber(modid = BATMod.MODID, value = Dist.CLIENT)
-public class BATClientEventHandler {
+public class TooltipHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onItemTooltip(ItemTooltipEvent event) {
@@ -62,18 +63,18 @@ public class BATClientEventHandler {
 		var registryAccess = mc.level.registryAccess();
 		var lines = event.getToolTip();
 
-		boolean alt = Screen.hasAltDown();
-		boolean shift = Screen.hasShiftDown();
+		boolean showNBT = isKeyPressed(KeyBinds.VIEW_NBT);
+		boolean showTagInfo = isKeyPressed(KeyBinds.VIEW_TAGS);
 
 		// Alt: shows all item NBT data
-		if (alt && BATConfig.nbtTooltip.get()) {
+		if (showNBT && Config.nbtTooltip.get()) {
 			CompoundTag tag = stack.getTag();
 			if (tag != null && !tag.isEmpty()) {
 				for (String key : tag.getAllKeys()) {
 					Tag nbt = tag.get(key);
 					MutableComponent line = Component.empty();
-					line.append(BATIcons.PATCHED_COMPONENT);
-					line.append(BATIcons.SMALL_SPACE);
+					line.append(Icons.PATCHED_COMPONENT);
+					line.append(Icons.SMALL_SPACE);
 					line.append(Component.literal(key).withStyle(ChatFormatting.YELLOW));
 					line.append(Component.literal("="));
 					appendNbtValue(line, nbt);
@@ -83,13 +84,13 @@ public class BATClientEventHandler {
 		}
 
 		// Shift: fuel + tag tooltip
-		else if (shift) {
-			if (BATConfig.fuelTooltip.get()) {
+		else if (showTagInfo) {
+			if (Config.fuelTooltip.get()) {
 				int fuel = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
 				if (fuel > 0) {
 					MutableComponent line = Component.empty();
-					line.append(BATIcons.FIRE);
-					line.append(BATIcons.SMALL_SPACE);
+					line.append(Icons.FIRE);
+					line.append(Icons.SMALL_SPACE);
 					MutableComponent txt = Component.empty().withStyle(ChatFormatting.GOLD);
 					txt.append("Fuel: ");
 					String s = String.valueOf(fuel / 20F);
@@ -105,13 +106,13 @@ public class BATClientEventHandler {
 			}
 
 			// Food & Saturation tooltip
-			if (BATConfig.foodTooltip.get()) {
+			if (Config.foodTooltip.get()) {
 				FoodProperties food = stack.getFoodProperties(null);
 				if (food != null) {
 					MutableComponent line = Component.empty();
 					// Always show food icon
-					line.append(BATIcons.FOOD);
-					line.append(BATIcons.SMALL_SPACE);
+					line.append(Icons.FOOD);
+					line.append(Icons.SMALL_SPACE);
 
 					// Analyse effects
 					boolean hasHarmful = false;
@@ -139,11 +140,11 @@ public class BATClientEventHandler {
 
 					// Choose second icon: poison if harmful, heart if beneficial only, none otherwise
 					if (hasHarmful) {
-						line.append(BATIcons.POISON);
-						line.append(BATIcons.SMALL_SPACE);
+						line.append(Icons.POISON);
+						line.append(Icons.SMALL_SPACE);
 					} else if (hasBeneficial) {
-						line.append(BATIcons.HEART);
-						line.append(BATIcons.SMALL_SPACE);
+						line.append(Icons.HEART);
+						line.append(Icons.SMALL_SPACE);
 					}
 
 					// Food stats
@@ -165,14 +166,14 @@ public class BATClientEventHandler {
 			}
 
 			// Energy tooltip (FE capability)
-			if (BATConfig.energyTooltip.get()) {
+			if (Config.energyTooltip.get()) {
 				stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
 					int stored = energy.getEnergyStored();
 					int capacity = energy.getMaxEnergyStored();
 					if (capacity > 0) {
 						MutableComponent line = Component.empty();
-						line.append(BATIcons.ENERGY);
-						line.append(BATIcons.SMALL_SPACE);
+						line.append(Icons.ENERGY);
+						line.append(Icons.SMALL_SPACE);
 						MutableComponent txt = Component.empty().withStyle(ChatFormatting.GOLD);
 						txt.append("Energy: ");
 						txt.append(Component.literal(stored + " / " + capacity).withStyle(ChatFormatting.YELLOW));
@@ -184,7 +185,7 @@ public class BATClientEventHandler {
 			}
 
 			// Tags
-			if (BATConfig.tagTooltip.get()) {
+			if (Config.tagTooltip.get()) {
 				Map<ResourceLocation, TagInstance> tempTagNames = new LinkedHashMap<>();
 				ItemTagIconsEvent tEvent = new ItemTagIconsEvent(event, tempTagNames);
 
