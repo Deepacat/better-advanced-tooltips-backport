@@ -14,6 +14,12 @@
 		},
 		{
 			"type": "bitmap",
+			"file": "betteradvancedtooltips:font/icons/tag/block_entity.png",
+			"ascent": 7,
+			"chars": ["R"]
+		},
+		{
+			"type": "bitmap",
 			"file": "betteradvancedtooltips:font/icons/tag/enchantment.png",
 			"ascent": 7,
 			"chars": ["C"]

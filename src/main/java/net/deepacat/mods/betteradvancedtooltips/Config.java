@@ -4,7 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
-public class BATConfig {
+public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> removeCreativeTabTooltip;
 	public static ForgeConfigSpec.ConfigValue<Boolean> removeComponentCountTooltip;
 	public static ForgeConfigSpec.ConfigValue<Boolean> nbtTooltip;
